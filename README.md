@@ -50,16 +50,16 @@ The bot.py script is the entry point for the template Telegram bot. It performs 
 bot:
 
 1. Set up logging: The logging module is imported and configured to log messages to the console.
-2. Load the configuration: The load_config() function from the tgbot.config module is called to read the configuration
+2. Load the configuration: The `load_config()` function from the `tgbot.config` module is called to read the configuration
    from the environment.
-3. Set up the storage: Depending on the use_redis flag in the configuration, either a MemoryStorage or a RedisStorage2
+3. Set up the storage: Depending on the `use_redis` flag in the configuration, either a `MemoryStorage` or a `RedisStorage2`
    instance is created to store the bot's state.
-4. Create the bot and the dispatcher: A Bot instance is created using the bot token from the configuration, and a
-   Dispatcher instance is created using the Bot instance and the storage.
-5. Register middlewares, filters, and handlers: The register_all_middlewares(), register_all_filters(), and
-   register_all_handlers() functions are called to register all the middlewares, filters, and handlers that are used by
+4. Create the bot and the dispatcher: A `Bot` instance is created using the bot token from the configuration, and a
+   `Dispatcher` instance is created using the `Bot` instance and the storage.
+5. Register middlewares, filters, and handlers: The `register_all_middlewares()`, `register_all_filters()`, and
+   `register_all_handlers()` functions are called to register all the middlewares, filters, and handlers that are used by
    the bot.
-6. Start the polling loop: The start_polling() method of the Dispatcher instance is called to start the main event loop
+6. Start the polling loop: The `start_polling()` method of the Dispatcher instance is called to start the main event loop
    for the bot. This method listens for incoming messages and routes them to the appropriate handler.
 
 ### `tgbot/config.py`
