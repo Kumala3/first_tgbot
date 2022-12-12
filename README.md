@@ -49,7 +49,7 @@ tgbot_template/
 The bot.py script is the entry point for the template Telegram bot. It performs the following steps to start and run the
 bot:
 
-1. Set up logging: The logging module is imported and configured to log messages to the console.
+1. Set up logging: The `logging` module is imported and configured to log messages to the console.
 2. Load the configuration: The `load_config()` function from the `tgbot.config` module is called to read the configuration
    from the environment.
 3. Set up the storage: Depending on the `use_redis` flag in the configuration, either a `MemoryStorage` or a `RedisStorage2`
