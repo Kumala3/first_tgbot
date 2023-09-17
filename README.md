@@ -1,4 +1,7 @@
-# tgbot_template
+# tgbot_template (aiogram v2.0)
+
+> **Note**: This template is for aiogram version 2.0. If you're interested in using the latest features and functionalities, consider using the updated [tgbot_template_v3](https://github.com/Latand/tgbot_template_v3) which is compatible with aiogram 3.0.
+
 
 <img height="30em" src="https://raw.githubusercontent.com/anki-geo/ultimate-geography/a44a569a922e1d241517113e2917736af808eed7/src/media/flags/ug-flag-united_kingdom.svg" alt="english" align = "center"/>
 This template is recommended to use in your Telegram bots written on <a href='https://github.com/aiogram/aiogram'>AIOgram</a>.
