@@ -1,5 +1,6 @@
 from aiogram import Dispatcher, types
 from tgbot.filters.admin import AdminFilter
+from tgbot.misc.throttling import rate_limit
 
 
 # async def admin_start(message: types.Message):
@@ -12,6 +13,7 @@ from tgbot.filters.admin import AdminFilter
 
 
 def register_admin(dp: Dispatcher):
+    @rate_limit(10, key="admin_start")
     @dp.message_handler(AdminFilter(is_admin=True), commands=['start'])
     async def admin_start(message: types.Message):
         await message.answer("Hello Admin!")

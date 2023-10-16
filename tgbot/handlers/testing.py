@@ -4,8 +4,11 @@ from aiogram.dispatcher.filters import Command
 from tgbot.misc.states import Test
 from aiogram import Dispatcher, types
 
+from tgbot.misc.throttling import rate_limit
+
 
 def register_tests(dp: Dispatcher):
+    @rate_limit(10, key="test")
     @dp.message_handler(Command('test'), state=None)
     async def testing_user(message: types.Message):
         await message.answer("Вы начали тестирование программы.\n"
