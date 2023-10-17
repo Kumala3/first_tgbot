@@ -19,6 +19,7 @@ class ThrottlingMiddleWare(BaseMiddleware):
         self.prefix = key_prefix
 
     async def throttle(self, target: Union[types.Message, types.CallbackQuery]):
+
         handler = current_handler.get()
         if not handler:
             return
@@ -30,30 +31,36 @@ class ThrottlingMiddleWare(BaseMiddleware):
         key = getattr(handler, "throttling_key", None)
         if not key:
             return
+        num_messages = getattr(handler, "throttling_num_messages", None)
 
         try:
             await dp.throttle(key=key, rate=limit)
         except Throttled as thr:
-            await self.target_throttled(target, thr, dp, key)
+            result = await self.target_throttled(target, thr, dp, key, num_messages)
+            if result:
+                return
             raise CancelHandler()
 
     @staticmethod
     async def target_throttled(target: Union[types.Message, types.CallbackQuery],
-                               throttled: Throttled, dispatcher: Dispatcher, key: str):
+                               throttled: Throttled, dispatcher: Dispatcher, key: str, num_messages: int, ):
+
         message = target.message if isinstance(target, types.CallbackQuery) else target
         delta = throttled.rate - throttled.delta
 
-        if throttled.exceeded_count == 5:
+        if throttled.exceeded_count == int(num_messages) - 2:
             await message.reply("Пожалуйста не нажимайте на кнопки слишком часто или же вы попадете в мут на 3 минуты")
             return
-        elif throttled.exceeded_count == 7:
+        elif throttled.exceeded_count == num_messages:
             await message.reply(f"Вы превысили предел нажимания на кнопки.Вы отправились в мут на {delta} секунд.")
+            return
+        else:
             return
 
         await asyncio.sleep(delta)
 
         thr = await dispatcher.check_key(key)
-        if thr.exceeded_count == throttled.exceeded_count:
+        if thr.exceeded_count == num_messages:
             await message.reply("Вы были размучены, пожалуйста не нужно нажимать на кнопки слишком часто!")
 
     async def on_process_message(self, message, data):

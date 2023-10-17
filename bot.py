@@ -14,11 +14,13 @@ from tgbot.handlers.testing import register_tests
 from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.middlewares.bit_brother import BigBrother
 from tgbot.middlewares.throttling import ThrottlingMiddleWare
+from tgbot.middlewares.acl import ACLMiddleWare
 
 logger = logging.getLogger(__name__)
 
 
 def register_all_middlewares(dp, config):
+    dp.setup_middleware(ACLMiddleWare())
     dp.setup_middleware(ThrottlingMiddleWare(limit=10))
     dp.setup_middleware(BigBrother(config=config))
     dp.setup_middleware(EnvironmentMiddleware(config=config))

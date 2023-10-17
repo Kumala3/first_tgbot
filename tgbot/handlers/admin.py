@@ -13,7 +13,7 @@ from tgbot.misc.throttling import rate_limit
 
 
 def register_admin(dp: Dispatcher):
-    @rate_limit(10, key="admin_start")
+    @rate_limit(60, key="admin_start", num_messages=5)
     @dp.message_handler(AdminFilter(is_admin=True), commands=['start'])
     async def admin_start(message: types.Message):
         await message.answer("Hello Admin!")

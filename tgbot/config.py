@@ -14,7 +14,7 @@ class DbConfig:
 @dataclass
 class TgBot:
     token: str
-    admin_id: list[int]
+    admin_ids: list[int]
     banned_users_ids: list[int]
     use_redis: bool
 
@@ -38,7 +38,7 @@ def load_config(path: str = None):
     return Config(
         tg_bot=TgBot(
             token=env.str("BOT_TOKEN"),
-            admin_id=list(map(int, env.list("ADMIN_ID"))),
+            admin_ids=list(map(int, env.list("ADMIN_IDS"))),
             banned_users_ids=list(map(int, env.list("BANNED_USERS_IDS"))),
             use_redis=env.bool("USE_REDIS"),
         ),
