@@ -25,5 +25,5 @@ class User:
     def block(self):
         self.allowed = False
 
-    def allow(self):
+    def unblock_me(self):
         self.allowed = True

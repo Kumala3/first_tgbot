@@ -10,18 +10,21 @@ from tgbot.filters.admin import AdminFilter
 from tgbot.handlers.admin import register_admin
 from tgbot.handlers.echo import register_echo
 from tgbot.handlers.testing import register_tests
+from tgbot.handlers.acl_test import register_acl_test
 # from tgbot.handlers.user import register_user
 from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.middlewares.bit_brother import BigBrother
 from tgbot.middlewares.throttling import ThrottlingMiddleWare
 from tgbot.middlewares.acl import ACLMiddleWare
+from tgbot.middlewares.sentenel import Sentinel
 
 logger = logging.getLogger(__name__)
 
 
 def register_all_middlewares(dp, config):
+    dp.setup_middleware(ThrottlingMiddleWare())
     dp.setup_middleware(ACLMiddleWare())
-    dp.setup_middleware(ThrottlingMiddleWare(limit=10))
+    dp.setup_middleware(Sentinel())
     dp.setup_middleware(BigBrother(config=config))
     dp.setup_middleware(EnvironmentMiddleware(config=config))
 
@@ -33,8 +36,8 @@ def register_all_filters(dp):
 def register_all_handlers(dp):
     register_admin(dp)
     register_tests(dp)
+    register_acl_test(dp)
     register_echo(dp)
-
 
 async def main():
     logging.basicConfig(

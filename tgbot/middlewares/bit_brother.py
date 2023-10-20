@@ -4,8 +4,6 @@ from aiogram import types
 from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
-from tgbot.config import Config
-
 
 class BigBrother(BaseMiddleware):
 
@@ -37,7 +35,6 @@ class BigBrother(BaseMiddleware):
         logging.info(f"3. Pre Proces Message: {data=}")
         logging.info("Следующая точка: Filters")
         data["middleware_data"] = "Это пройдет в on_proces_message"
-
 
     async def on_pre_process_callback_query(self, callback: types.CallbackQuery, data: dict):
         await callback.answer()

@@ -8,7 +8,7 @@ from tgbot.misc.throttling import rate_limit
 
 
 def register_tests(dp: Dispatcher):
-    @rate_limit(10, key="test")
+    @rate_limit(10, key="test", num_messages=5)
     @dp.message_handler(Command('test'), state=None)
     async def testing_user(message: types.Message):
         await message.answer("Вы начали тестирование программы.\n"
