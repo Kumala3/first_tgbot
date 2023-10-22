@@ -19,9 +19,9 @@ def register_menus(dp: Dispatcher):
         await call.answer(cache_time=60)
         logging.info(f"callback_data = {call.data}")
         logging.info(f"callback_data dict = {callback_data}")
-        await call.message.answer(f"You bought for {callback_data.get('quantity')}", reply_markup=good)
+        await call.message.answer(f"You bought for", reply_markup=good)
 
-    @dp.callback_query_handler(text="cancel")
+    @dp.callback_query_handler(lambda message: message.text == "My profile")
     async def cancel_buying(call: CallbackQuery):
         await call.answer("You canceled this purchase", show_alert=True)
         await call.message.edit_reply_markup()
