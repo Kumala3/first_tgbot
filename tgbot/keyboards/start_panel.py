@@ -4,8 +4,8 @@ keyboard_panel = ReplyKeyboardMarkup(
     keyboard=[
         [
             KeyboardButton(text="My profile"),
-            KeyboardButton(text="Promocode"),
-            KeyboardButton(text="INFORMATION")
+            KeyboardButton(text="INFORMATION"),
+            KeyboardButton(text="Send file")
         ]
     ],
     resize_keyboard=True

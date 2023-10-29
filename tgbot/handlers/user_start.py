@@ -1,13 +1,18 @@
 from aiogram.types import Message
 from aiogram.dispatcher import Dispatcher
+from aiogram.types import CallbackQuery
+from aiogram import types
+
+from tgbot.config import load_config
 
 from tgbot.texts.my_profile import show_start_text
 from tgbot.texts.info_text import text_info
 from tgbot.texts.user_text import user_info
-
-from tgbot.keyboards.send_file import keyboard
+from tgbot.texts.send_file import file_send_rules_notifier
+from tgbot.keyboards.send_file import send_file_keybord
 from tgbot.keyboards.start_panel import keyboard_panel
 from tgbot.keyboards.support import support_user
+
 
 def register_user(dp: Dispatcher):
     @dp.message_handler(commands=['start'])
@@ -24,3 +29,22 @@ def register_user(dp: Dispatcher):
     @dp.message_handler(text="INFORMATION")
     async def info(message: Message):
         await message.answer(text=text_info, reply_markup=support_user)
+
+    @dp.message_handler(text="Send file")
+    async def send_file(message: Message):
+        await message.answer(text=file_send_rules_notifier, reply_markup=send_file_keybord)
+
+    @dp.message_handler(content_types=types.ContentType.DOCUMENT)
+    async def get_file(message: Message):
+        config = load_config()
+        file_name = message.document.file_name
+        if file_name.endswith(('.zip', '.rar')):
+            await message.forward(config.tg_bot.channel_username)
+            await message.reply(text="Ваш файл успешно отправлен! Ждите сообщения от Администратора!")
+        else:
+            await message.reply("Пожалуйста, отправьте файл в формате ZIP или RAR.")
+
+    @dp.callback_query_handler(text="Cancel_send_file")
+    async def cancel(call: CallbackQuery):
+        await call.message.answer(text="Отправка файла отменена", reply_markup=keyboard_panel)
+        await call.message.delete()
