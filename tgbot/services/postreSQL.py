@@ -40,7 +40,7 @@ class DataBase:
     async def create_table_users(self):
         sql = """ CREATE TABLE IF NOT EXISTS Users (
         id SERIAL PRIMARY KEY,
-        telegram_id BIGINT NOT NULL,
+        telegram_id BIGINT NOT NULL UNIQUE,
         username VARCHAR(255) NULL,
         full_name VARCHAR(255) NOT NULL,
         lang_code VARCHAR(255) NOT NULL,
@@ -59,9 +59,11 @@ class DataBase:
         ])
         return sql, tuple(parameters.values())
 
-    async def add_user(self, *args):
+    async def add_user(self, telegram_id: int, username: str, full_name: str, lang_code: str, is_premium: str,
+                       registered_time: str):
         sql = "INSERT INTO Users(telegram_id, username, full_name, lang_code, is_premium, registered_time) VALUES($1, $2, $3, $4, $5, $6)"
-        return await self.execute(sql, *args, execute=True)
+        return await self.execute(sql, telegram_id, username, full_name, lang_code, is_premium, registered_time,
+                                  execute=True)
 
     async def select_user(self, **kwargs):
         sql = "SELECT * FROM Users WHERE "

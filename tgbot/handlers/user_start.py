@@ -1,36 +1,34 @@
-from aiogram.types import Message
+from aiogram import types
 from aiogram.dispatcher import Dispatcher
 from aiogram.types import CallbackQuery
-from aiogram import types
+from aiogram.types import Message
 
-import logging
-from tgbot.services.postreSQL import DataBase
 from tgbot.config import load_config
-
-from tgbot.texts.my_profile import show_start_text
-from tgbot.texts.info_text import text_info
-from tgbot.texts.user_text import user_info
-from tgbot.texts.send_file import file_send_rules_notifier
 from tgbot.keyboards.send_file import send_file_keybord
 from tgbot.keyboards.start_panel import keyboard_panel
 from tgbot.keyboards.support import support_user
+from tgbot.services.postreSQL import DataBase
+from tgbot.texts.info_text import text_info
+from tgbot.texts.my_profile import show_start_text
+from tgbot.texts.send_file import file_send_rules_notifier
+from tgbot.texts.user_text import user_info
 
 
 def register_user(dp: Dispatcher):
     @dp.message_handler(commands=["start"])
     async def user_start(message: Message):
         db = DataBase()
-        telegram_id = message.from_user.id
-        username = message.from_user.username
-        user_fullname = message.from_user.full_name
-        lang_code = message.from_user.language_code
-        is_premium = str(message.from_user.is_premium)
-        registered_time = str(message.date.replace())
 
         await db.create_pool()
         await db.create_table_users()
-        await db.add_user(telegram_id, username, user_fullname, lang_code, is_premium, registered_time)
-        await message.answer(text=show_start_text(username), reply_markup=keyboard_panel)
+        await db.add_user(telegram_id=message.from_user.id,
+                          username=message.from_user.username,
+                          full_name=message.from_user.full_name,
+                          lang_code=message.from_user.language_code,
+                          is_premium=str(message.from_user.is_premium),
+                          registered_time=str(message.date.replace())
+                          )
+        await message.answer(text=show_start_text(message.from_user.username), reply_markup=keyboard_panel)
 
     @dp.message_handler(text="My profile")
     async def cancel_sending_file(message: Message):
